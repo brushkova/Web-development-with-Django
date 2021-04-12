@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 
 from .models import Book
 from .utils import average_rating
+from .forms import ExampleForm
 
 
 def index(request):
@@ -46,7 +47,6 @@ def book_detail(request, pk):
     return render(request, "reviews/book_detail.html", context)
 
 
-def base_form(request):
-    for name in request.POST:
-        print("{}: {}".format(name, request.POST.getlist(name)))
-    return render(request, "reviews/base_form.html", {"method": request.method})
+def view_function(request):
+    form = ExampleForm()
+    return render(request, "reviews/base_form.html", {"form": form})
