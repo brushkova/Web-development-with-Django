@@ -1,11 +1,17 @@
 from django.shortcuts import render, get_object_or_404
+
 from .models import Book
 from .utils import average_rating
+from .forms import ExampleForm
 
 
-def books_list(request):
-    books = Book.objects.filter(publication_date='2018-10-31')
-    book_list = []
+def index(request):
+    return render(request, "reviews/base.html")
+
+
+def book_list(request):
+    books = Book.objects.all()
+    books_with_reviews = []
     for book in books:
         reviews = book.review_set.all()
         if reviews:
@@ -14,27 +20,33 @@ def books_list(request):
         else:
             book_rating = None
             number_of_reviews = 0
-        book_list.append({'book': book,
-                          'book_rating': book_rating,
-                          'number_of_reviews': number_of_reviews})
+        books_with_reviews.append({"book": book, "book_rating": book_rating, "number_of_reviews": number_of_reviews})
+
     context = {
-        'book_list': book_list
+        "book_list": books_with_reviews
     }
-    return render(request, 'reviews/book_list.html', context)
+    return render(request, "reviews/book_list.html", context)
 
 
-def books_detail(request, pk):
+def book_detail(request, pk):
     book = get_object_or_404(Book, pk=pk)
     reviews = book.review_set.all()
     if reviews:
         book_rating = average_rating([review.rating for review in reviews])
-        context = ({'book': book,
-                    'book_rating': book_rating,
-                    'reviews': reviews})
-
+        context = {
+            "book": book,
+            "book_rating": book_rating,
+            "reviews": reviews
+        }
     else:
-        context = ({'book': book,
-                    'book_rating': None,
-                    'reviews': None})
+        context = {
+            "book": book,
+            "book_rating": None,
+            "reviews": None
+        }
+    return render(request, "reviews/book_detail.html", context)
 
-    return render(request, 'reviews/book_detail.html', context)
+
+def view_function(request):
+    form = ExampleForm()
+    return render(request, "reviews/base_form.html", {"form": form})
