@@ -48,5 +48,5 @@ def book_detail(request, pk):
 
 
 def view_function(request):
-    form = ExampleForm()
-    return render(request, "reviews/base_form.html", {"form": form})
+    form = ExampleForm(initial={'text_input': 'text'})
+    return render(request, "reviews/base_form.html", {"method": request.method, "form": form})

@@ -7,7 +7,13 @@
 <body>
 <form method="post">
     {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-    </table>
+    {{ form.as_p }}
+    <p>
+        <input type="submit" name="submit_input" value="Submit Input">
+    </p>
+    <p>
+        <button type="submit" name="button_element"           value="Button Element">
+            Button With <strong>Styled</strong> Text
+        </button>
+    </p>
 </form>
