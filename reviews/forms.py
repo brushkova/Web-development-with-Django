@@ -14,7 +14,8 @@ class OrderForm(forms.Form):
                                     widget=forms.NumberInput(attrs={'placeholder': 'Number of Books'}))
     send_confirmation = forms.BooleanField(required=False)
     email = forms.EmailField(required=False, validators=[validate_email_domain],
-                             widget=forms.EmailInput(attrs={'placeholder': 'Your company email address'}))
+                             widget=forms.EmailInput(attrs={'placeholder': 'Your company email address'}),
+                             initial='user@example.com')
 
     def clean_email(self):
         return self.cleaned_data['email'].lower()

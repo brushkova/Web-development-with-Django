@@ -10,12 +10,11 @@ def index(request):
 
 
 def form_example(request):
-    initial = {'email': 'user@example.com'}
 
     if request.method == "POST":
-        form = OrderForm(request.POST, initial=initial)
+        form = OrderForm(request.POST)
     else:
-        form = OrderForm(initial=initial)
+        form = OrderForm()
 
     if request.method == "POST":
         form = OrderForm(request.POST)
@@ -88,7 +87,3 @@ def book_detail(request, pk):
             "reviews": None
         }
     return render(request, "reviews/book_detail.html", context)
-
-
-
-
