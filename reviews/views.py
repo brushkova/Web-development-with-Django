@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 
-from .forms import SearchForm
+from .forms import OrderForm, SearchForm
 from .models import Book, Contributor
 from .utils import average_rating
 
@@ -9,9 +9,25 @@ def index(request):
     return render(request, "reviews/base.html")
 
 
+def form_example(request):
+    if request.method == "POST":
+        form = OrderForm(request.POST)
+    else:
+        form = OrderForm()
+
+    if request.method == "POST":
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            for name, value in form.cleaned_data.items():
+                print("{}: ({}) {}".format(name, type(value), value))
+
+    return render(request, "reviews/base_form.html", {"method": request.method, "form": form})
+
+
 def book_search(request):
     search_text = request.GET.get("search", "")
     form = SearchForm(request.GET)
+    form_2 = SearchForm(request.GET)
     books = set()
     if form.is_valid() and form.cleaned_data["search"]:
         search = form.cleaned_data["search"]
@@ -30,7 +46,8 @@ def book_search(request):
             for book in contributor.book_set.all():
                 books.add(book)
 
-    return render(request, "reviews/search_results.html", {"form": form, "search_text": search_text, "books": books})
+    return render(request, "reviews/search_results.html", {"form": form, "search_text": search_text, "books": books,
+                                                           "form_2": form_2})
 
 
 def book_list(request):
