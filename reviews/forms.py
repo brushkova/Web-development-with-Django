@@ -8,10 +8,13 @@ def validate_email_domain(value):
 
 
 class OrderForm(forms.Form):
-    magazine_count = forms.IntegerField(min_value=0, max_value=80)
-    book_count = forms.IntegerField(min_value=0, max_value=50)
+    magazine_count = forms.IntegerField(min_value=0, max_value=80,
+                                        widget=forms.NumberInput(attrs={'placeholder': 'Number of Magazines'}))
+    book_count = forms.IntegerField(min_value=0, max_value=50,
+                                    widget=forms.NumberInput(attrs={'placeholder': 'Number of Books'}))
     send_confirmation = forms.BooleanField(required=False)
-    email = forms.EmailField(required=False, validators=[validate_email_domain])
+    email = forms.EmailField(required=False, validators=[validate_email_domain],
+                             widget=forms.EmailInput(attrs={'placeholder': 'Your company email address'}))
 
     def clean_email(self):
         return self.cleaned_data['email'].lower()
