@@ -1,29 +1,14 @@
 from django.shortcuts import render, get_object_or_404, redirect
 
-from .forms import OrderForm, SearchForm, PublisherForm
-from .models import Book, Contributor, Publisher
+from .forms import SearchForm, PublisherForm, ReviewForm
+from .models import Book, Contributor, Publisher, Review
 from .utils import average_rating
 from django.contrib import messages
+from django.utils import timezone
 
 
 def index(request):
     return render(request, "reviews/base.html")
-
-
-# def form_example(request):
-#
-#     if request.method == "POST":
-#         form = OrderForm(request.POST)
-#     else:
-#         form = OrderForm()
-#
-#     if request.method == "POST":
-#         form = OrderForm(request.POST)
-#         if form.is_valid():
-#             for name, value in form.cleaned_data.items():
-#                 print("{}: ({}) {}".format(name, type(value), value))
-#
-#     return render(request, "reviews/base_form.html", {"method": request.method, "form": form})
 
 
 def book_search(request):
@@ -108,3 +93,32 @@ def publisher_edit(request, pk=None):
         form = PublisherForm(instance=publisher)
     return render(request, "reviews/instance_form.html",
                   {"form": form, "instance": publisher, "model_type": "Publisher"})
+
+
+def review_edit(request, book_pk, review_pk=None):
+    book = get_object_or_404(Book, pk=book_pk)
+
+    if review_pk is not None:
+        review = get_object_or_404(Review, book_id=book_pk, pk=review_pk)
+    else:
+        review = None
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, instance=review)
+        if form.is_valid():
+            update_review = form.save(commit=False)
+            update_review.book = book
+            if review is None:
+                messages.success(request, 'Review for \'{}\' was created'.format(book))
+            else:
+                update_review.date_edited = timezone.now()
+                messages.success(request, 'Review for \'{}\' was updated'.format(book))
+            return redirect('review_edit', book.pk)
+    else:
+        form = ReviewForm(instance=review)
+    return render(request, 'reviews/reviews_edit.html',
+                  {'form': form,
+                   'instance': review,
+                   'model_type': 'Review',
+                   "related_instance": book,
+                   "related_model_type": "Book"})
