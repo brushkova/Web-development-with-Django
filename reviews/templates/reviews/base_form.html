@@ -2,12 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Form</title>
+    <title>Title</title>
 </head>
 <body>
+{% for message in messages %}
+<p><em>{{ message.level_tag|title }}:</em> {{ message }}</p>
+{% endfor %}
 <form method="post">
     {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-    </table>
+    {{ form.as_p }}
+    <p>
+        <input type="submit" value="Submit">
+    </p>
 </form>
+</body>
+</html>
