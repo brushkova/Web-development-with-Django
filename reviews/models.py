@@ -15,16 +15,13 @@ class Publisher(models.Model):
 
 class Book(models.Model):
     """A published book."""
-    title = models.CharField(max_length=70,
-                             help_text="The title of the book.")
-    publication_date = models.DateField(
-        verbose_name="Date the book was published.")
-    isbn = models.CharField(max_length=20,
-                            verbose_name="ISBN number of the book.")
-    publisher = models.ForeignKey(Publisher,
-                                  on_delete=models.CASCADE)
-    contributors = models.ManyToManyField('Contributor',
-                                          through="BookContributor")
+    title = models.CharField(max_length=70, help_text="The title of the book.")
+    publication_date = models.DateField(verbose_name="Date the book was published.")
+    isbn = models.CharField(max_length=20, verbose_name="ISBN number of the book.")
+    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE)
+    contributors = models.ManyToManyField('Contributor', through="BookContributor")
+    cover = models.ImageField(null=True, blank=True, upload_to='book_covers/')
+    sample = models.FileField(null=True, blank=True, upload_to='book_sample/')
 
     def __str__(self):
         return "{} ({})".format(self.title, self.isbn)
