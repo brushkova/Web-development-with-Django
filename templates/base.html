@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville|Source+Sans+Pro&display=swap">
   </head>
   <body>
-        <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
+  <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
           <a class="navbar-brand" href="/">{% block brand %}<img src="{% static 'reviews/logo.png' %}">{% endblock %}</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -26,14 +26,24 @@
               <li class="nav-item active">
                 <a class="nav-link" href="/books/">Home <span class="sr-only">(current)</span></a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Logout</a>
-              </li>
+              {% if user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link" href="/accounts/logout">Logout</a>
+                </li>
+              {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="/accounts/login">Login</a>
+                </li>
+              {% endif %}
             </ul>
             <form action="{% url 'book_search' %}" class="form-inline my-2 my-lg-0">
              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search" value="{{ search_text }}" minlength="3">
               <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
+            {% if user.is_authenticated %}
+              <a class="nav-link" href="/accounts/profile">User:
+              {{ user.username }}</a>
+            {% endif %}
           </div>
         </nav>
         <div class="container-fluid">
@@ -46,8 +56,6 @@
           <h1>Welcome to Bookr!</h1>
         {% endblock %}
         </div>
-<img src="{% static 'reviews/mybooks.png' %}" alt="My image">
-<a href="{% static 'reviews/document.pdf' %}" target="_blank"> Download PDF</a>
 <footer class="page-footer font-small blue">
     <div class="footer-copyright text-center py-3">© 2020 Copyright:
         <a href="https://www.packtpub.com" target="_blank"> Packt Publications</a>
