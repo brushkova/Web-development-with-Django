@@ -1,58 +1,20 @@
 {% extends "base.html" %}
+
+{% load profile_tags %}
+
 {% block title %}Bookr{% endblock %}
+
+{% block heading %}Profile{% endblock %}
+
 {% block content %}
-
-<style>
-.flexrow { display: flex;
-           border: 2px black;
-}
-.flexrow > div { flex: 1; }
-
-.infocell {
-  border: 2px solid green;
-  border-radius: 5px 25px;
-  background-color: white;
-  padding: 5px;
-  margin: 20px 5px 5px 5px;
-}
-</style>
-
-  <div class="flexrow" >
-    <div class="infocell" >
-      <p>Profile</p>
-      <p>
-          Username: {{ request.user.username }} <br>
-          Name: {{ request.user.first_name }} {{ request.user.last_name }}<br>
-          Date Joined: {{ request.user.date_joined }} <br>
-          Email: {{ request.user.email }}<br>
-          Last Login: {{ request.user.last_login }}<br>
-      </p>
-    </div>
-
-    <div class="infocell" >
-      <p>Viewed Books</p>
-      <p>
-      {% for book_id, book_title in request.session.viewed_books %}
-      <a href="/books/{{ book_id }}">{{ book_title }}</a><br>
-      {% empty %}
-            No recently viewed books found.
-      {% endfor %}
-      </p>
-    </div>
-
-  <div class="infocell" >
-    <p>Search History</p>
-    <p>
-      {% for search_in, search in request.session.search_history %}
-      <a href="{% url 'book_search' %}?search={{search|urlencode}}&search_in={{ search_in}}" >
-            {{ search }} ({{ search_in }})</a>
-      <br>
-      {% empty %}
-        No search history found.
-      {% endfor %}
-    </p>
-  </div>
-
-  </div>
+  <ul>
+      <li>Username: {{ user.username }} </li>
+      <li>Name: {{ user.first_name }} {{ user.last_name }}</li>
+      <li>Date Joined: {{ user.date_joined }} </li>
+      <li>Email: {{ user.email }}</li>
+      <li>Last Login: {{ user.last_login }}</li>
+      <li>Groups: {{ groups }}{% if not groups %}None{% endif %} </li>
+  </ul>
+  {% book_list user.username %}
 
 {% endblock %}

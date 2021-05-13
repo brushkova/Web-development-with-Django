@@ -66,7 +66,7 @@ def book_list(request):
     context = {
         "book_list": books_with_reviews
     }
-    return render(request, "reviews/book_list.html", context)
+    return render(request, "reviews/book_form.html", context)
 
 
 def book_detail(request, pk):
