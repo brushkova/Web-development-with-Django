@@ -1,5 +1,5 @@
 from django import template
-from reviews.models import Review
+from ..models import Review
 
 register = template.Library()
 
