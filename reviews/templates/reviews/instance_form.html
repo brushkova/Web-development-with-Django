@@ -15,11 +15,18 @@
         New {{ model_type }}
     {% endif %}
 </h2>
+<!--<form method="post">-->
+<!--    {% csrf_token %}-->
+<!--    {{ form.as_p }}-->
+<!--    <button type="submit" class="btn btn-primary">-->
+<!--        {% if instance %}Save{% else %}Create{% endif %}-->
+<!--    </button>-->
+<!--</form>-->
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    <h3>Add a comment</h3>
     <button type="submit" class="btn btn-primary">
-        {% if instance %}Save{% else %}Create{% endif %}
-    </button>
+        <input type="hidden" name="entry" value="{{ reviews.id }}">
+        <p><input type="submit"></p>
 </form>
 {% endblock %}

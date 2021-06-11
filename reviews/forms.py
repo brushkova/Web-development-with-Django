@@ -43,11 +43,18 @@ class PublisherForm(forms.ModelForm):
         model = Publisher
         fields = '__all__'
 
+    def save(self, user=None):
+        publisher = super(PublisherForm, self).save(commit=False)
+        if user:
+            publisher.user = user
+        publisher.save()
+        return publisher
+
 
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
-        exclude = ['date_edited', 'book']
+        exclude = ['date_edited', 'book', 'post']
 
     rating = forms.IntegerField(min_value=0, max_value=5)
 
@@ -56,3 +63,9 @@ class BookMediaForm(forms.ModelForm):
     class Meta:
         model = Book
         fields = ['cover', 'sample']
+
+
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ['title', 'publisher']

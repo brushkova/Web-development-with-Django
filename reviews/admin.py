@@ -21,9 +21,21 @@ class ContributorAdmin(admin.ModelAdmin):
     search_fields = ('last_names__startswith', 'first_names')
 
 
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('creator_id', 'content', 'book_id', 'date_created', 'active')
+    list_filter = ('active', 'date_created')
+    search_fields = ('email', 'content')
+    actions = ['approve_comments']
+
+    def approve_comments(self, request, queryset):
+        queryset.update(active=True)
+
+
+
 # Register your models here.
 admin.site.register(Publisher)
 admin.site.register(Contributor, ContributorAdmin)
 admin.site.register(Book, BookAdmin)
 admin.site.register(BookContributor)
-admin.site.register(Review)
+# admin.site.register(Review)
