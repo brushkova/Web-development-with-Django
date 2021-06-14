@@ -10,7 +10,7 @@ urlpatterns = [
     path('accounts/profile/', bookr.views.profile, name='profile'),
     path('admin/', admin.site.urls),
     path('', reviews.views.index),
-    path('book-search/', reviews.views.book_search, name='book_search'),
+    path('book-search/', reviews.views.BookSearchList.as_view(), name='book_search'),
     path('', include('reviews.urls')),
 ]
 

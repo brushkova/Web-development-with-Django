@@ -4,12 +4,9 @@ from . import views, api_views
 urlpatterns = [
     path('api/contributors/', api_views.ContributorView.as_view(), name='contributors'),
     path('api/all_books/', api_views.AllBooks.as_view(), name='all_books'),
-    path('books/', views.book_list, name='book_list'),
-    path('books/<int:pk>/', views.book_detail, name='book_detail'),
-    path('books/book-search/', views.book_search, name='book_search'),
-    path('books/<int:pk>/media/', views.book_media, name='book_media'),
-    path('books/<int:book_pk>/reviews/new/', views.review_edit, name='review_create'),
-    path('books/<int:book_pk>/reviews/<int:review_pk>/', views.review_edit, name='review_edit'),
-    path('books/publishers/<int:pk>/', views.publisher_edit, name='publisher_edit'),
-    path('books/publishers/new/', views.publisher_edit, name='publisher_create')
+    path('books/', views.BookList.as_view(), name='book_list'),
+    path('books/<int:pk>/', views.BookDetail.as_view(), name='book_detail'),
+    path('books/book-search/', views.BookSearchList.as_view(), name='book_search'),
+    path('books/publishers/new/', views.PublisherCreate.as_view(), name='publisher_create'),
+    path('books/publishers/<int:pk>/', views.PublisherEdit.as_view(), name='publisher_edit')
    ]

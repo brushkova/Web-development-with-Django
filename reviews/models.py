@@ -12,6 +12,9 @@ class Publisher(models.Model):
     def __str__(self):
         return self.name
 
+    # def __unicode__(self):
+    #     return u"%s" % self.name
+
 
 class Book(models.Model):
     """A published book."""
@@ -31,6 +34,22 @@ class Book(models.Model):
         return "{}-{}-{}-{}-{}".format(self.isbn[0:3], self.isbn[3:4],
                                        self.isbn[4:6], self.isbn[6:12],
                                        self.isbn[12:13])
+
+
+class Review(models.Model):
+    content = models.TextField(help_text="The Review text.")
+    rating = models.IntegerField(help_text="The the reviewer has given.")
+    date_created = models.DateTimeField(auto_now_add=True,
+                                        help_text="The date and time the review was created.")
+    date_edited = models.DateTimeField(null=True,
+                                       help_text="The date and time the review was last edited.")
+    creator = models.ForeignKey(auth.get_user_model(), editable=False, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE,
+                             help_text="The Book that this review is for.")
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return "{} - {}".format(self.creator.username, self.book.title)
 
 
 class Contributor(models.Model):
@@ -68,20 +87,3 @@ class BookContributor(models.Model):
 
     def __str__(self):
         return "{} {} {}".format(self.contributor.initialled_name(), self.role, self.book.isbn)
-
-
-class Review(models.Model):
-    content = models.TextField(help_text="The Review text.")
-    rating = models.IntegerField(help_text="The the reviewer has given.")
-    date_created = models.DateTimeField(auto_now_add=True,
-                                        help_text="The date and time the review was created.")
-    date_edited = models.DateTimeField(null=True,
-                                       help_text="The date and time the review was last edited.")
-    creator = models.ForeignKey(auth.get_user_model(), on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE,
-                             help_text="The Book that this review is for.")
-
-    def __str__(self):
-        return "{} - {}".format(self.creator.username, self.book.title)
-
-
